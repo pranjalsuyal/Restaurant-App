@@ -1,26 +1,17 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import SearchBar from "../components/SearchBar";
-import yelp from "../api/yelp";
+import useResults from "../hooks/useResults";
+import ResultsList from "../components/ResultsList";
 
 const SearchScreen = () => {
   const [term, setTerm] = useState("");
-  const [results, setResults] = useState([]);
-  const [errMsg, setErrMsg] = useState("");
+  const [searchApi, results, errMsg] = useResults();
 
-  const searchApi = async () => {
-    try {
-      const response = await yelp.get("/search", {
-        params: {
-          limit: 50,
-          term, //here it is => term = {term}
-          location: "san jose",
-        },
-      });
-      setResults(response.data.businesses);
-    } catch (err) {
-      setErrMsg("Something went wrong");
-    }
+  const filterResultsByPrice = (price) => {
+    return results.filter((result) => {
+      return result.price === price;
+    });
   };
 
   return (
@@ -28,10 +19,14 @@ const SearchScreen = () => {
       <SearchBar
         term={term}
         onTermChange={setTerm} // equivalent to (newTerm) => setTerm(newTerm)
-        onTermSubmit={searchApi} // equivalent to () => searchApi()
+        onTermSubmit={() => searchApi(term)}
       />
       {errMsg ? <Text>{errMsg}</Text> : null}
       <Text>We have found {results.length} results</Text>
+      <ResultsList results={filterResultsByPrice("$")} title="Cost Effective" />
+      <ResultsList results={filterResultsByPrice("$$")} title="Bit Pricer" />
+      <ResultsList results={filterResultsByPrice("$$$")} title="Big Spender" />
+      <ResultsList results={filterResultsByPrice("$$$$")} title="Max Spender" />
     </View>
   );
 };

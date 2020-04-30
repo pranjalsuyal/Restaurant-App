@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 15,
     flexDirection: "row",
+    marginBottom: 10,
   },
   inputStyle: {
     // borderColor: "black",

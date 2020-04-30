@@ -15,14 +15,14 @@ const SearchScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <>
       <SearchBar
         term={term}
         onTermChange={setTerm} // equivalent to (newTerm) => setTerm(newTerm)
         onTermSubmit={() => searchApi(term)}
       />
       {errMsg ? <Text>{errMsg}</Text> : null}
-      <Text>We have found {results.length} results</Text>
+      {/* <Text>We have found {results.length} results</Text> */}
       <ScrollView>
         <ResultsList
           results={filterResultsByPrice("$")}
@@ -38,7 +38,7 @@ const SearchScreen = () => {
           title="Max Spender"
         />
       </ScrollView>
-    </View>
+    </>
   );
 };
 
